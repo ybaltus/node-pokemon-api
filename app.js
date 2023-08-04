@@ -3,6 +3,7 @@ const { success, getUniqueId } = require('./helpers/helper')
 const morgan = require('morgan')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
+const { Sequelize } = require('sequelize');
 let path = require('path')
 let pokemons = require('./mocks/mocks-pokemons')
 
@@ -11,13 +12,29 @@ const app = express()
 const port = 3000
 const baseApiUrl = '/api/v1'
 
+// ORM sequelize
+const sequelize = new Sequelize('pokedex', 'userdev', 'userdev1990', {
+    host: 'localhost',
+    dialect: 'mariadb'
+});
+
+const connectionDB  = async() => {
+    try {
+        await sequelize.authenticate();
+        console.log('Connection has been established successfully.');
+    } catch (error) {
+        console.error('Unable to connect to the database:', error);
+    }
+}
+connectionDB();
+
 // Middleware Morgan (Logger)
 app.use(morgan('dev'))
 
 // Middleware Serve-Favicon
 app.use(favicon(path.join(__dirname, 'public', 'icons', 'favicon.ico')))
 
-//Body-Parser
+// Middleware Body-Parser
 app.use(bodyParser.json());
 
 // Homepage
