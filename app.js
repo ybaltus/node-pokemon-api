@@ -1,8 +1,9 @@
 const express = require('express')
-const { success } = require('./helpers/helper')
+const { success, getUniqueId } = require('./helpers/helper')
 const morgan = require('morgan')
 const favicon = require('serve-favicon')
-var path = require('path')
+const bodyParser = require('body-parser')
+let path = require('path')
 let pokemons = require('./mocks/mocks-pokemons')
 
 // Config
@@ -10,17 +11,14 @@ const app = express()
 const port = 3000
 const baseApiUrl = '/api/v1'
 
-// Middleware Logger
-// app.use((req, res, next) => {
-//     console.log(`URL : ${req.url}`)
-//     next()
-// })
-
 // Middleware Morgan (Logger)
 app.use(morgan('dev'))
 
-// Favicon
+// Middleware Serve-Favicon
 app.use(favicon(path.join(__dirname, 'public', 'icons', 'favicon.ico')))
+
+//Body-Parser
+app.use(bodyParser.json());
 
 // Homepage
 app.get('/', (req, res) => {
@@ -41,6 +39,35 @@ app.get(`${baseApiUrl}/pokemons`, (req, res) => {
     res.json(success(message, pokemons))
 })
 
+// Add new pokemon
+app.post(`${baseApiUrl}/pokemons`, (req, res) => {
+    const id = getUniqueId(pokemons);
+    const newPokemon = {...req.body, ...{id: id, created: new Date()}}
+    pokemons.push(newPokemon)
+    const message = `The new pokemon ${newPokemon} has ben added with success.`
+    res.json(success(message, newPokemon))
+})
+
+// Update a pokemon
+app.put(`${baseApiUrl}/pokemon/:id`, (req, res) => {
+    const idPokemon = parseInt(req.params.id)
+    const pokemonUpdated = {...req.body, id: idPokemon, updated: new Date()}
+    pokemons = pokemons.map(pokemon => {
+        return pokemon.id === idPokemon ? pokemonUpdated : pokemon
+    })
+    const message = `The pokemon ${pokemonUpdated} has ben edited with success.`
+    res.json(success(message, pokemonUpdated))
+
+})
+
+// Delete a pokemon
+app.delete(`${baseApiUrl}/pokemon/:id`, (req, res) => {
+    const idPokemon = parseInt(req.params.id)
+    const pokemonToDelete = pokemons.find(pokemon => pokemon.id === idPokemon)
+    pokemons = pokemons.filter(pokemon => pokemon.id !== idPokemon)
+    const message = `The pokemon ${pokemonToDelete.name} has ben deleted with success.`
+    res.json(success(message, pokemonToDelete))
+})
 
 app.listen(port, () => {
     console.log(`Notre application Node est démarrée sur : http://localhost:${port}`)
