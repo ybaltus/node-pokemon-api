@@ -3,7 +3,7 @@ const express = require('express')
 const morgan = require('morgan')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
-const {initDB, Pokemon} = require('./src/db/sequelizeManager')
+const {initDB} = require('./src/db/sequelizeManager')
 let path = require('path')
 // let pokemons = require('./src/db/mocks/mocks-pokemons')
 
@@ -66,7 +66,6 @@ require('./src/routes/updatePokemon')(app, baseApiUrl)
 //     })
 //     const message = `The pokemon ${pokemonUpdated} has ben edited with success.`
 //     res.json(success(message, pokemonUpdated))
-//
 // })
 
 // Delete a pokemon
@@ -78,6 +77,12 @@ require('./src/routes/deletePokemon')(app, baseApiUrl)
 //     const message = `The pokemon ${pokemonToDelete.name} has ben deleted with success.`
 //     res.json(success(message, pokemonToDelete))
 // })
+
+// Middleware errors
+app.use(({res}) => {
+    const message = "Unable to find the ressource requested. try another URL."
+    res.status(404).json({message})
+})
 
 app.listen(port, () => {
     console.log(`Notre application Node est démarrée sur : http://localhost:${port}`)
