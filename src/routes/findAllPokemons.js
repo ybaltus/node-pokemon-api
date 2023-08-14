@@ -1,8 +1,9 @@
 const {Pokemon} = require('./../db/sequelizeManager')
 const {Op} = require('sequelize')
+const authJWT = require('./../auth/auth')
 
 module.exports = (app, baseApiUrl) => {
-    app.get(`${baseApiUrl}`, async (req, res) => {
+    app.get(`${baseApiUrl}`, authJWT, async (req, res) => {
         try{
             let pokemons;
             let message;

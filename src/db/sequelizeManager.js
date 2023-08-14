@@ -1,6 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const PokemonModel = require("./../models/pokemonModel");
+const UserModel = require('./../models/userModel')
 const pokemons = require("./../db/mocks/mocks-pokemons");
+const bcrypt = require('bcrypt')
 
 // Init ORM sequelize
 const sequelize = new Sequelize('pokedex', 'userdev', 'userdev1990', {
@@ -18,6 +20,7 @@ const _connectionDB  = async() => {
 }
 
 const Pokemon = PokemonModel(sequelize, DataTypes);
+const User = UserModel(sequelize, DataTypes)
 
 const initDB = async() => {
     try{
@@ -38,6 +41,14 @@ const initDB = async() => {
                 types: pokemon.types
             })
         })
+
+        // Insert a user
+        const password = await bcrypt.hash('password', 10)
+        const newUser = await User.create({
+            username: 'userTest',
+            password: password
+        });
+
     } catch (error) {
         console.error('Unable to synchronize the database :', error);
     }
@@ -45,5 +56,6 @@ const initDB = async() => {
 
 module.exports = {
     initDB,
-    Pokemon
+    Pokemon,
+    User
 }

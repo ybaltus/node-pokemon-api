@@ -1,7 +1,8 @@
 const {Pokemon} = require('./../db/sequelizeManager')
+const authJWT = require('./../auth/auth')
 
 module.exports = (app, baseApiUrl) => {
-    app.get(`${baseApiUrl}/:id`, async (req, res) => {
+    app.get(`${baseApiUrl}/:id`, authJWT,async (req, res) => {
         try{
             const pokemon = await Pokemon.findByPk(req.params.id);
             const message = pokemon !== undefined ? "The pokemon has been found." : "The pokemon has not been found."

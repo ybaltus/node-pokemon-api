@@ -1,8 +1,9 @@
 const {Pokemon} = require('./../db/sequelizeManager')
 const {ValidationError, UniqueConstraintError} = require("sequelize");
+const authJWT = require('./../auth/auth')
 
 module.exports = (app, baseApiUrl) => {
-    app.put(`${baseApiUrl}/:id`, async (req, res) => {
+    app.put(`${baseApiUrl}/:id`, authJWT, async (req, res) => {
         try{
             await Pokemon.update(req.body, {
                 where: {

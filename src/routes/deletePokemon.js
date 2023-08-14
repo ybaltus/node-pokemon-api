@@ -1,7 +1,8 @@
 const {Pokemon} = require('./../db/sequelizeManager')
+const authJWT = require('./../auth/auth')
 
 module.exports = (app, baseApiUrl) => {
-    app.delete(`${baseApiUrl}/:id`, async (req, res) => {
+    app.delete(`${baseApiUrl}/:id`, authJWT,async (req, res) => {
         try{
             const id = req.params.id
             const PokemonToDeleted = await Pokemon.findByPk(id)

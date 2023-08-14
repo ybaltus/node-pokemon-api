@@ -1,8 +1,9 @@
 const {Pokemon} = require('./../db/sequelizeManager')
 const {ValidationError, UniqueConstraintError} = require("sequelize");
+const authJWT = require('./../auth/auth')
 
 module.exports = (app, baseApiUrl) => {
-    app.post(`${baseApiUrl}`, async (req, res) => {
+    app.post(`${baseApiUrl}`, authJWT,async (req, res) => {
         try{
             const newPokemon = await Pokemon.create(req.body);
             const message = `The new pokemon ${newPokemon} has ben added with success.`

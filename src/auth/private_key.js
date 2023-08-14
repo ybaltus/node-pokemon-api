@@ -1,0 +1,1 @@
+module.exports = 'API_PRIVATE_KEY'

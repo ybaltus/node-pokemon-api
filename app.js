@@ -78,6 +78,9 @@ require('./src/routes/deletePokemon')(app, baseApiUrl)
 //     res.json(success(message, pokemonToDelete))
 // })
 
+// Login
+require('./src/routes/login')(app, baseApiUrl)
+
 // Middleware errors
 app.use(({res}) => {
     const message = "Unable to find the ressource requested. try another URL."
