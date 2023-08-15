@@ -1,22 +1,25 @@
 const express = require('express')
 // const { success, getUniqueId } = require('./src/helpers/helper')
-const morgan = require('morgan')
 const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const {initDB} = require('./src/db/sequelizeManager')
 let path = require('path')
+const morgan = require("morgan");
 // let pokemons = require('./src/db/mocks/mocks-pokemons')
 
 // Config
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000
 const baseApiUrl = '/api/v1/pokemons'
 
 // Init DB
 initDB();
 
 // Middleware Morgan (Logger)
-app.use(morgan('dev'))
+if(process.env.NODE_ENV === 'development'){
+    const morgan = require('morgan')
+    app.use(morgan('dev'))
+}
 
 // Middleware Serve-Favicon
 app.use(favicon(path.join(__dirname, 'public', 'icons', 'favicon.ico')))

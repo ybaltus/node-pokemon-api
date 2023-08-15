@@ -4,7 +4,8 @@
   "description": "An API REST with NodeJS and ExpressJS for pokemon",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "NODE_ENV=production node app.js",
+    "dev": "NODE_ENV=development nodemon app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Yannis",

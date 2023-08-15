@@ -28,7 +28,7 @@ const initDB = async() => {
         _connectionDB();
 
         // Syncronize db with sequelize
-        await sequelize.sync({ force: true });
+        await sequelize.sync();
         console.log("The database \"pokedex\" has been synchronized.")
 
         // Insert the mocks-pokemons datas
