@@ -4,7 +4,8 @@ const favicon = require('serve-favicon')
 const bodyParser = require('body-parser')
 const {initDB} = require('./src/db/sequelizeManager')
 let path = require('path')
-const morgan = require("morgan");
+const cors = require('cors')
+// const morgan = require("morgan");
 // let pokemons = require('./src/db/mocks/mocks-pokemons')
 
 // Config
@@ -26,6 +27,9 @@ app.use(favicon(path.join(__dirname, 'public', 'icons', 'favicon.ico')))
 
 // Middleware Body-Parser
 app.use(bodyParser.json());
+
+// Middleware Cors
+app.use(cors())
 
 // Homepage
 require('./src/routes/homepage')(app)
